@@ -1,2 +1,2 @@
 # AVL
-Ejercicio de taller d balanceo de arboles.
+Ejercicio de taller de balanceo de arboles.

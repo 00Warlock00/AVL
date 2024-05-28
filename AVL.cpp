@@ -31,94 +31,10 @@ struct nodo
 struct nodo *raiz = NULL;
 struct nodo *aux, *aux2;
 
-void validarMatricula(int matricula[])
-{
-
-    cout << "Ingrese la matricula (maximo 4 Digitos): ";
-    cin >> matricula;
-    if (matricula < 1000 || matricula > 9999)
-    {
-        cout << "LA MATRICULA DEBE SER DE 4 DIGITOS";
-    }
-    else
-    {
-        // Verificar si la matrícula ingresada tiene más de 4 dígitos
-        int numDigitos = 0;
-        int temp = matricula[0];
-
-        while (temp != 0)
-        {
-            temp /= 10;
-            numDigitos++;
-        }
-
-        if (numDigitos != 4)
-        {
-            cout << "La matricula debe tener exactamente 4 Digitos." << endl;
-        }
-
-        else
-        {
-            cout << "Entrada inválida. Intente nuevamente." << endl;
-        }
-    }
-
-    void validarFecha(int &anio, int &mes, int &dia)
-    {
-        bool esValida = false;
-        while (!esValida)
-        {
-            cout << " INGRESE EL ANIO\n";
-
-            if (anio != 2024)
-            {
-                cout << " EL AÑO DEBE SER EL ACTUAL\n";
-            }
-            else
-            {
-                esValida = true;
-                cout << " INGRESE EL MES\n";
-
-                if (mes < 1 || mes > 12)
-                {
-                    cout << "EL MES DEBE SER DE 1 A 12\n";
-                    esValida = false;
-                }
-                else
-                {
-                    cout << " INGRESE EL DIA\n";
-
-                    if (dia < 1 || dia > 31)
-                    {
-                        cout << " EL DIA DEBE SER DE 1 A 31\n";
-                        esValida = false;
-                    }
-                }
-                else
-                {
-                    cout << "Entrada inválida. Intente nuevamente." << endl;
-                    esValida = false;
-                }
-            }
-
-            else
-            {
-                cout << "Entrada inválida. Intente nuevamente." << endl;
-                esValida = false;
-            }
-        }
-
-        else
-        {
-            cout << "Entrada inválida. Intente nuevamente." << endl;
-        }
-    }
-}
-
 // Función para validar el identificador
 bool validarIdentificador(int identificador[])
 {
-    if (identificador == nullptr)
+    if (identificador == NULL)
     {
         return false;
     }
@@ -137,7 +53,7 @@ bool validarIdentificador(int identificador[])
 // Función para imprimir los detalles de un nodo
 void imprimirNodo(nodo *nodoEncontrado)
 {
-    if (nodoEncontrado == nullptr)
+    if (nodoEncontrado == NULL)
     {
         cout << "El nodo es nulo" << endl;
         return;
@@ -263,27 +179,47 @@ struct nodo *insertar(struct nodo *nodo)
 
     return nodo;
 }
-
-void Inorden(nodo *aux3)
+void Inorden(nodo *nodoActual)
 {
-
-    if (aux3 != NULL)
+    if (nodoActual != NULL)
     {
-        Inorden(aux3->izq);
-        cout << "Identificación: " << aux3->identificacion << endl;
+        Inorden(nodoActual->izq); // Recorrer subárbol izquierdo
+
+        // Imprimir información del nodo actual
+        cout << "Identificación: ";
+        for (int i = 0; i < 10; i++)
+        {
+            cout << nodoActual->identificacion[i];
+        }
         cout << endl;
-        Inorden(aux3->der);
+        cout << "Matrícula: ";
+        for (int i = 0; i < 4; i++)
+        {
+            cout << nodoActual->matricula[i];
+        }
+        cout << endl;
+        cout << "Nombre: " << nodoActual->nombre << endl;
+        cout << "Año: " << nodoActual->anio << endl;
+        cout << "Mes: " << nodoActual->mes << endl;
+        cout << "Día: " << nodoActual->dia << endl;
+        cout << "Costo: " << nodoActual->value << endl;
+        cout << "Destino: " << nodoActual->destino << endl;
+        cout << "Capacidad: " << nodoActual->embarcacion << endl;
+        cout << endl;
+
+        Inorden(nodoActual->der); // Recorrer subárbol derecho
     }
 }
 nodo *BuscarPorIdentificacion(nodo *r, int identificador[])
 {
+    bool sonIguales = true;
     if (r == NULL)
     {
         return NULL;
     }
     else
     {
-        bool sonIguales = true; // Inicializar sonIguales a true
+        // Inicializar sonIguales a true
         for (int i = 0; i < 10; i++)
         {
             if (r->identificacion[i] != identificador[i])
@@ -370,50 +306,86 @@ void EliminarPorIdentificacion(nodo *raiz, int eliminar[])
         EliminarPorIdentificacion(raiz->der, eliminar);
     }
 }
+string generarIdentificadorUnico(string matricula, int anio, int mes, int dia)
+{
+    string identificador = "";
+
+    // Extraer los dos primeros caracteres de la matrícula
+    identificador = matricula.substr(0, 2);
+
+    // Convertir año, mes y día a cadenas y concatenarlos con el identificador
+    identificador += to_string(anio) + to_string(mes / 10) + to_string(mes % 10) + to_string(dia / 10) + to_string(dia % 10);
+
+    return identificador;
+}
 void crearNodo()
 {
     aux = (struct nodo *)malloc(sizeof(struct nodo));
 
     // Validar matrícula
-    cout << " INGRESE MATRICULA DE LA EMBARCACIÓN (MAXIMO 4 DIGITOS)\n ";
-    validarMatricula(aux->matricula);
+    do
+    {
+        cout << " INGRESE MATRICULA DE LA EMBARCACION";
+        cout << "LA MATRICULA ES DE 4 DIGITOS\n";
 
-    // Ingresar nombre de la embarcación
-    cout << " INGRESE NOMBRE DE SU EMBARCACIÓN\n";
+        cin >> aux->matricula[0];
+
+    } while (aux->matricula[0] < 1000 || aux->matricula[0] > 9999); // Validar que la matrícula tenga 4 dígitos
+
+    cout << " INGRESE NOMBRE DE SU EMBARCACION\n";
     cin.ignore();                                  // Agregar esta línea
     cin.getline(aux->nombre, sizeof(aux->nombre)); // Cambio aquí
-
-    // Validar fecha
     cout << " AHORA LA FECHA:\n\n";
-    validarFecha(aux->anio, aux->mes, aux->dia);
-
+    do
+    {
+        cout << "ANIO\n";
+        cin >> aux->anio;
+    } while (aux->anio != 2024);
+    do
+    {
+        cout << "MES\n";
+        cin >> aux->mes;
+    } while (aux->mes < 1 || aux->mes > 12);
+    do
+    {
+        cout << "DIA\n";
+        cin >> aux->dia;
+    } while (aux->dia < 1 || aux->dia > 31);
     cout << " COSTO:\n";
     cin >> aux->value;
 
     cout << " DESTINO:\n";
     cin.ignore();
     cin.getline(aux->destino, sizeof(aux->destino)); // para permitir ingresar cadenas con espacio
-
-    cout << "INGRESE LA CAPACIDAD DE SU EMBARCACION:\n";
-    cin >> aux->embarcacion;
-    if (aux->embarcacion < 1 || aux->embarcacion > 1000)
+    do
     {
-        cout << "Entrada inválida para la capacidad de la embarcación. Operación cancelada." << endl;
-        free(aux);
-        aux = NULL;
-    }
-    else
-    {
-        // Generar identificador único
-        cout << "\tSU IDENTIFICADOR UNICO ES: \n";
-        identificador(aux->matricula, aux->anio, aux->mes, aux->dia, aux->identificacion);
-        cout << aux->identificacion << endl;
-        cout << "\n";
+        cout << "INGRESE LA CAPACIDAD DE SU EMBARCACION:\n";
+        cin >> aux->embarcacion;
+    } while (aux->embarcacion < 1 || aux->embarcacion > 1000);
 
-        aux->izq = NULL;
-        aux->der = NULL;
-        aux->altura = 1;
+    cout << "\tSU IDENTIFICADOR UNICO ES: \n";
+
+    string matriculaStr = "";
+    for (int i = 0; i < 4; i++)
+    {
+        matriculaStr += to_string(aux->matricula[i]);
     }
+
+    string identificadorUnico = generarIdentificadorUnico(matriculaStr, aux->anio, aux->mes, aux->dia);
+    for (int i = 0; i < 10; i++)
+    {
+        aux->identificacion[i] = (i < (int)identificadorUnico.length()) ? identificadorUnico[i] - '0' : 0;
+    }
+    for (int i = 0; i < 10; i++)
+    {
+        cout << aux->identificacion[i];
+    }
+    cout << endl;
+    cout << "\n";
+
+    aux->izq = NULL;
+    aux->der = NULL;
+    aux->altura = 1;
 }
 int main()
 {
@@ -432,7 +404,7 @@ int main()
         cout << "5. Registrar un pasajero en un viaje" << endl;
         cout << "6. Listar todos los pasajeros" << endl;
         cout << "7. Salir" << endl;
-        cout << "Ingrese una opción: ";
+        cout << "Ingrese una opcion:\n";
         cin >> opc;
 
         switch (opc)
@@ -506,4 +478,4 @@ int main()
     } while (opc != 7);
 
     return 0;
- }
+}

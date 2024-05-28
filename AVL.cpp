@@ -59,22 +59,22 @@ void imprimirNodo(nodo *nodoEncontrado)
         return;
     }
 
-    cout << "Identificación: ";
+    cout << "Identificacion: ";
     for (int i = 0; i < 10; i++)
     {
         cout << nodoEncontrado->identificacion[i];
     }
     cout << endl;
-    cout << "Matrícula: ";
+    cout << "Matricula: ";
     for (int i = 0; i < 4; i++)
     {
         cout << nodoEncontrado->matricula[i];
     }
     cout << endl;
     cout << "Nombre: " << nodoEncontrado->nombre << endl;
-    cout << "Año: " << nodoEncontrado->anio << endl;
+    cout << "Anio: " << nodoEncontrado->anio << endl;
     cout << "Mes: " << nodoEncontrado->mes << endl;
-    cout << "Día: " << nodoEncontrado->dia << endl;
+    cout << "Dia: " << nodoEncontrado->dia << endl;
     cout << "Costo: " << nodoEncontrado->value << endl;
     cout << "Destino: " << nodoEncontrado->destino << endl;
     cout << "Capacidad: " << nodoEncontrado->embarcacion << endl;
@@ -186,22 +186,22 @@ void Inorden(nodo *nodoActual)
         Inorden(nodoActual->izq); // Recorrer subárbol izquierdo
 
         // Imprimir información del nodo actual
-        cout << "Identificación: ";
+        cout << "Identificacion: ";
         for (int i = 0; i < 10; i++)
         {
             cout << nodoActual->identificacion[i];
         }
         cout << endl;
-        cout << "Matrícula: ";
+        cout << "Matricula: ";
         for (int i = 0; i < 4; i++)
         {
             cout << nodoActual->matricula[i];
         }
         cout << endl;
         cout << "Nombre: " << nodoActual->nombre << endl;
-        cout << "Año: " << nodoActual->anio << endl;
+        cout << "Anio: " << nodoActual->anio << endl;
         cout << "Mes: " << nodoActual->mes << endl;
-        cout << "Día: " << nodoActual->dia << endl;
+        cout << "Dia: " << nodoActual->dia << endl;
         cout << "Costo: " << nodoActual->value << endl;
         cout << "Destino: " << nodoActual->destino << endl;
         cout << "Capacidad: " << nodoActual->embarcacion << endl;
@@ -413,12 +413,15 @@ int main()
             crearNodo();
             raiz = insertar(raiz);
             break;
-        case 2:
-            cout << "Ingrese el identificador del viaje a buscar: ";
-            for (int i = 0; i < 10; i++)
-            {
-                cin >> identificador[i];
-            }
+         case 2:
+         do{
+          cout << "Ingrese el identificador del viaje a buscar: ";
+            
+           cin >> identificador[0];
+            
+
+         }while(aux->matricula[0] < 1 || aux->matricula[0] > 9999999999);
+            
 
             if (validarIdentificador(identificador))
             {
@@ -434,17 +437,17 @@ int main()
             }
             else
             {
-                cout << "El identificador ingresado no es válido." << endl;
+                cout << "El identificador ingresado no es valido." << endl;
             }
             break;
         case 3:
             cout << "Viajes registrados (Inorden):\n";
-            Inorden(raiz);
+            imprimirNodo(raiz);
             cout << endl;
             break;
         case 4:
             cout << "Eliminar un viaje:\n";
-            cout << "Ingrese la identificación a eliminar: ";
+            cout << "Ingrese la identificacion a eliminar: ";
             for (int i = 0; i < 10; i++)
             {
                 cin >> identificacion[i];

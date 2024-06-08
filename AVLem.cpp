@@ -1,28 +1,28 @@
-
 #include <iostream>
 #include <malloc.h>
 #include <iomanip>
 #include <cstring>
 #include <sstream>
 #include <cmath>
+#include<conio.h>
+#include<string>
+
 using namespace std;
 
 struct pasajero
 {
-    string nombrep;
+    char nombrep[45];
 
     pasajero *sig;
 };
-const int MAX_NOMBRE_EMBARCACION = 100; // Tamaño máximo permitido para el nombre de la embarcación
 
-const int MAX_IDENTIFICADOR = 100; // Tamaño máximo permitido para el identificador
 struct nodo
 {
 
     char destino[45];
     int matricula[4];
-    string nombre;
-    int identificacion[MAX_IDENTIFICADOR];
+    char nombre[45];
+    long long int identificacion[10];
 
     int capacidad;
     int value;
@@ -45,16 +45,16 @@ void listarPasajeros(nodo *nodoEmbarcacion)
     if (nodoEmbarcacion == NULL)
     {
         // El árbol está vacío, no hay elementos para listar
-        cout << "El árbol está vacío." << endl;
+        cout << "EL ARBOL ESTA VACIO." << endl;
         return;
     }
 
     if (nodoEmbarcacion->inicioPasajeros == NULL)
     {
-        cout << "No hay pasajeros registrados en esta embarcación." << endl;
+        cout << "NO HAY PASAJEROS REGISTRADOS EN ESTA EMBARCACION." << endl;
         return;
     }
-    cout << "Embarcación: " << nodoEmbarcacion->nombre << " (ID: " << nodoEmbarcacion->identificacion[0] << ")" << endl;
+    cout << "EMBARCACION: " << nodoEmbarcacion->nombre << " (ID: " << nodoEmbarcacion->identificacion[0] << ")" << endl;
     pasajero *temp = nodoEmbarcacion->inicioPasajeros;
     int count = 1;
     while (temp != NULL)
@@ -65,40 +65,33 @@ void listarPasajeros(nodo *nodoEmbarcacion)
     }
 }
 
-void listarTodosLosPasajeros(nodo *nodolis)
-{
-    if (nodolis == NULL)
-    {
-        cout << "No hay embarcaciones registradas." << endl;
-        return;
-    }
-    if (nodolis != NULL)
-    {
+void listarTodosLosPasajeros(nodo *nodolis) {
+    if (nodolis != NULL) {
         listarTodosLosPasajeros(nodolis->izq);
         listarPasajeros(nodolis);
+        listarTodosLosPasajeros(nodolis->der); // Agregar este recorrido
     }
-
-    listarTodosLosPasajeros(nodolis->der);
 }
+
 void imprimirNodo(nodo *nodoEncontrado)
 {
     if (nodoEncontrado == NULL)
     {
-        cout << "El nodo es nulo" << endl;
+        cout << "EL NODO ES NULO" << endl;
         return;
     }
 
-    cout << "Identificador: " << nodoEncontrado->identificacion[0] << endl;
-    cout << "Matrícula: " << nodoEncontrado->matricula[0] << endl;
+    cout << "IDENTIFICADOR: " << nodoEncontrado->identificacion[0] << endl;
+    cout << "MATRICULA: " << nodoEncontrado->matricula[0] << endl;
 
     cout << endl;
-    cout << "Nombre: " << nodoEncontrado->nombre << endl;
-    cout << "Año: " << nodoEncontrado->anio << endl;
-    cout << "Mes: " << nodoEncontrado->mes << endl;
-    cout << "Día: " << nodoEncontrado->dia << endl;
-    cout << "Costo: " << nodoEncontrado->value << endl;
-    cout << "Destino: " << nodoEncontrado->destino << endl;
-    cout << "Capacidad: " << nodoEncontrado->embarcacion << endl;
+    cout << "NOMBRE: " << nodoEncontrado->nombre << endl;
+    cout << "ANIO: " << nodoEncontrado->anio << endl;
+    cout << "MES: " << nodoEncontrado->mes << endl;
+    cout << "DIA: " << nodoEncontrado->dia << endl;
+    cout << "COSTO: " << nodoEncontrado->value << endl;
+    cout << "DESTINO: " << nodoEncontrado->destino << endl;
+    cout << "CAPACIDAD: " << nodoEncontrado->embarcacion << endl;
 }
 int obtenerAltura(struct nodo *n)
 
@@ -152,7 +145,7 @@ struct nodo *rotarIzquierda(struct nodo *x)
     return y;
 }
 
-bool compararIdentificadores(int identificador1, int identificador2)
+bool compararIdentificadores(long long int identificador1,long long  int identificador2)
 {
     return identificador1 < identificador2;
 }
@@ -209,15 +202,15 @@ void Inorden(nodo *raizz)
         Inorden(raizz->izq); // Recorrer subárbol izquierdo
 
         // Imprimir información del nodo actual en orden ascendente
-        cout << "Nombre: " << raizz->nombre << endl;
-        cout << "Identificador: " << raizz->identificacion[0] << endl;
+        cout << "NOMBRE: " << raizz->nombre << endl;
+        cout << "IDENTIFICADOR: " << raizz->identificacion[0] << endl;
         cout << endl;
 
         Inorden(raizz->der); // Recorrer subárbol derecho
     }
 }
 
-nodo *BuscarPorIdentificador(nodo *raiz, int idt)
+nodo *BuscarPorIdentificador(nodo *raiz, long long int idt)
 {
     if (raiz == NULL)
         return NULL;
@@ -230,77 +223,97 @@ nodo *BuscarPorIdentificador(nodo *raiz, int idt)
 
     return BuscarPorIdentificador(raiz->der, idt);
 }
-
-void EliminarPorIdentificacion(nodo *tallo, int eliminar[])
+nodo *obtenerSucesor(nodo *n)
 {
-    if (tallo == NULL)
+    nodo *temp = n->der;
+    while (temp->izq != NULL)
     {
-        return;
+        temp = temp->izq;
     }
-
-    bool sonIguales = true;
-    for (int i = 0; i < 10; i++)
-    {
-        if (tallo->identificacion[i] != eliminar[i])
-        {
-            sonIguales = false;
-            break;
-        }
-    }
-
-    if (sonIguales)
-    {
-        // Eliminar el nodo
-        if (tallo->izq == NULL && tallo->der == NULL)
-        {
-            delete tallo;
-            tallo = NULL;
-        }
-        else if (tallo->izq == NULL)
-        {
-            nodo *temp = tallo;
-            tallo = tallo->der;
-            delete temp;
-        }
-        else if (tallo->der == NULL)
-        {
-            nodo *temp = raiz;
-            tallo = tallo->izq;
-            delete temp;
-        }
-        else
-        {
-            nodo *temp = tallo->der;
-            while (temp->izq != NULL)
-            {
-                temp = temp->izq;
-            }
-            // Copiar el identificador elemento por elemento
-            for (int i = 0; i < 10; i++)
-            {
-                tallo->identificacion[i] = temp->identificacion[i];
-            }
-            EliminarPorIdentificacion(tallo->der, eliminar);
-        }
-    }
-    else if (eliminar[0] < raiz->identificacion[0])
-    {
-        EliminarPorIdentificacion(tallo->izq, eliminar);
-    }
-    else
-    {
-        EliminarPorIdentificacion(tallo->der, eliminar);
-    }
+    return temp;
 }
-int generarIdentificadorUnico(int matricula, int anio, int mes, int dia)
+
+struct nodo *eliminar(struct nodo *raiz, long long int idt) {
+    if (raiz == NULL) {
+        cout << "NO SE ENCONTRO UNA EMBARCACION CON ESE IDENTIFICADOR." << endl;
+        return raiz; // Retorna NULL si no se encuentra el nodo
+    }
+
+    if (idt < raiz->identificacion[0]) {
+        raiz->izq = eliminar(raiz->izq, idt);
+    } else if (idt > raiz->identificacion[0]) {
+        raiz->der = eliminar(raiz->der, idt);
+    } else {
+        // Nodo con el ID encontrado
+        if (raiz->izq == NULL || raiz->der == NULL) {
+            struct nodo *temp = raiz->izq ? raiz->izq : raiz->der;
+            if (temp == NULL) {
+                temp = raiz;
+                raiz = NULL;
+            } else {
+                *raiz = *temp;
+            }
+            free(temp);
+        } else {
+            // Nodo con dos hijos
+            struct nodo *temp = obtenerSucesor(raiz);
+            struct nodo *padreTemp = raiz;
+            while (padreTemp->der != temp) {
+                padreTemp = padreTemp->der;
+            }
+
+            // Copiar los datos del sucesor al nodo actual
+            raiz->identificacion[0] = temp->identificacion[0];
+            strcpy(raiz->nombre, temp->nombre);
+            // ... (copiar otros campos)
+
+            // Eliminar el sucesor (que ahora est� duplicado en el nodo actual)
+            if (padreTemp == raiz) {
+                raiz->der = eliminar(raiz->der, temp->identificacion[0]);
+            } else {
+                padreTemp->izq = eliminar(padreTemp->izq, temp->identificacion[0]);
+            }
+        }
+    }
+
+    // Si el �rbol estaba vac�o despu�s de eliminar el nodo, retornar NULL
+    if (raiz == NULL) {
+        return raiz;
+    }
+
+    // Actualizar la altura y rebalancear el �rbol (igual que antes)
+    raiz->altura = 1 + mayor(obtenerAltura(raiz->izq), obtenerAltura(raiz->der));
+    int balance = obtenerBalance(raiz);
+
+    // REBALANCEAR DESPUES DE ELIMINAR UN NODO.
+    if (balance > 1 && obtenerBalance(raiz->izq) >= 0) {
+        return rotarDerecha(raiz);
+    }
+    if (balance < -1 && obtenerBalance(raiz->der) <= 0) {
+        return rotarIzquierda(raiz);
+    }
+    if (balance > 1 && obtenerBalance(raiz->izq) < 0) {
+        raiz->izq = rotarIzquierda(raiz->izq);
+        return rotarDerecha(raiz);
+    }
+    if (balance < -1 && obtenerBalance(raiz->der) > 0) {
+        raiz->der = rotarDerecha(raiz->der);
+        return rotarIzquierda(raiz);
+    }
+
+    return raiz;
+}
+
+long long int generarIdentificadorUnico(int matricula, int anio, int mes, int dia)
 {
-    int identificador = 0;
+    long long int identificador = 0;
 
     int xx = matricula / 100;
-    identificador = xx * 100000000 + anio * 10000 + mes * 100 + dia;
+    identificador = (long long)xx * 100000000 + anio * 10000 + mes * 100 + dia;
 
     return identificador;
 }
+
 void crearNodo()
 {
     
@@ -317,24 +330,23 @@ void crearNodo()
     } while (aux->matricula[0] < 1000 || aux->matricula[0] > 9999); // Validar que la matrícula tenga 4 dígitos
     cout << " INGRESE NOMBRE DE SU EMBARCACION\n";
     cin.ignore();
-    cin>>aux->nombre; 
-
-    
+    cin.getline(aux->nombre, sizeof(aux->nombre)); 
 
     cout << " AHORA LA FECHA:\n";
+    cout<<endl;
     do
     {
-        cout << "ANIO\n";
+        cout << "ANIO\n(DEBE SER EL ACTUAL)\n";
         cin >> aux->anio;
     } while (aux->anio != 2024);
     do
     {
-        cout << "MES\n";
+        cout << "MES\n(1-12)\n";
         cin >> aux->mes;
     } while (aux->mes < 1 || aux->mes > 12);
     do
     {
-        cout << "DIA\n";
+        cout << "DIA\n(1-31)\n";
         cin >> aux->dia;
     } while (aux->dia < 1 || aux->dia > 31);
     cout << " COSTO:\n";
@@ -343,7 +355,7 @@ void crearNodo()
     cout << " DESTINO:\n";
     cin.ignore();
     cin.getline(aux->destino, sizeof(aux->destino)); // para permitir ingresar cadenas con espacio
-    do
+    		
     {
         cout << "INGRESE LA CAPACIDAD DE SU EMBARCACION:\n";
         cin >> aux->embarcacion;
@@ -352,6 +364,7 @@ void crearNodo()
     cout << "\tSU IDENTIFICADOR UNICO ES: \n";
 
     aux->identificacion[0] = generarIdentificadorUnico(aux->matricula[0], aux->anio, aux->mes, aux->dia);
+
     cout << aux->identificacion[0] << endl;
     cout << "\n";
 
@@ -361,16 +374,18 @@ void crearNodo()
     aux->inicioPasajeros = NULL;
     aux->finPasajeros = NULL;
     aux->numPasajeros = 0;
+    system("pause");
 }
 
-void registrarpasajero(nodo *raiz, int identificado[])
+void registrarpasajero(nodo *raiz, long long int identificado[])
 {
 
-    cout << " nodos disponibles: " << endl;
+    cout << " NODOS DISPONIBLES: " << endl;
     Inorden(raiz);
+    system("pause");
 
-    int identificadore;
-    cout << "Ingrese el identificador de la embarcacion a registrar sus pasajeros: ";
+   long long  int identificadore;
+    cout << "INGRESE EL IDENTIFICADOR AL CUAL DESEA REGISTRAR SU PASAJERO: ";
     cin >> identificadore;
 
     // Buscar el nodo con el identificador proporcionado
@@ -378,13 +393,13 @@ void registrarpasajero(nodo *raiz, int identificado[])
 
     if (nodoEncontrado == NULL)
     {
-        cout << "No se encontró la embarcación con el identificador proporcionado." << endl;
+        cout << "NO SE ENCONTRO UNA EMBARCACION CON ESE IDENTIFICADOR." << endl;
         return;
     }
 
-    if (nodoEncontrado->numPasajeros >= nodoEncontrado->embarcacion)
+    if (nodoEncontrado->numPasajeros > nodoEncontrado->embarcacion)
     {
-        cout << "La embarcacion ha alcanzado su capacidad maxima." << endl;
+        cout << "LA CAPACIDAD DE LA EMBARCACION ESTA COMPLETA." << endl;
         return;
     }
 
@@ -392,49 +407,46 @@ void registrarpasajero(nodo *raiz, int identificado[])
     do
     {
         cab = (struct pasajero *)malloc(sizeof(struct pasajero));
-        cout << "Ingrese el nombre del pasajero: ";
+        cout << "INGRESE NOMBRE DEL PASAJERO: ";
         cin.ignore();
-        getline(cin, cab->nombrep);
+        cin.getline(cab->nombrep, sizeof(cab->nombrep)); 
         cab->sig = NULL;
-        if (nodoEncontrado->inicioPasajeros == NULL)
-        {
+        if (nodoEncontrado->inicioPasajeros == NULL) {
             nodoEncontrado->inicioPasajeros = cab;
-            nodoEncontrado->finPasajeros = cab;
-        }
-        else
-        {
+            nodoEncontrado->finPasajeros = cab; // Inicializar finPasajeros aqu�
+        } else {
             nodoEncontrado->finPasajeros->sig = cab;
-            nodoEncontrado->finPasajeros = cab;
+            nodoEncontrado->finPasajeros = cab; // Actualizar finPasajeros aqu�
         }
 
         nodoEncontrado->numPasajeros++;
-        cout << "Pasajero registrado exitosamente." << endl;
+        cout << "PASAJERO REGISTRADO EXITOSAMENTE." << endl;
 
-        cout << "¿Desea registrar otro pasajero? (s/n): ";
+        cout << "� DESEA AGREGAR OTRO PASAJERO ? (s/n):\n ";
         cin >> opcion;
-    } while (opcion == 's' || opcion == 'S');
+    } while (opcion == 's' || opcion == 'S' && nodoEncontrado->numPasajeros < nodoEncontrado->embarcacion); // Verificar capacidad
 }
 
 int main()
 {
     
     int opc = 0;
-
-    int idb=0;
-    int identificador[MAX_IDENTIFICADOR];
-    int identificacion[MAX_IDENTIFICADOR];
+raiz=NULL; 
+    long long int idb=0;
+    long long int identificador[10];
+    long long int identificacion[10];
     string nombrePasajero;
     do
     {
         cout << "\tMENU DE OPCIONES" << endl;
-        cout << "1. Registrar nodo" << endl;
-        cout << "2. Buscar un nodo por identificador" << endl;
-        cout << "3. Listar todos los nodos" << endl;
-        cout << "4. Eliminar un nodo por identificador" << endl;
-        cout << "5. Registrar un pasajero en un nodo" << endl;
-        cout << "6. Listar todos los pasajeros" << endl;
-        cout << "7. Salir" << endl;
-        cout << "Ingrese una opcion:\n";
+        cout << "1. REGISTRAR NODO" << endl;
+        cout << "2. BUSCAR UN NODO POR IDENTIFICADOR" << endl;
+        cout << "3. LISTAR TODOS LOS NODOS (INORDEN)" << endl;
+        cout << "4. ELIMINAR UN NODO POR IDENTIFICADOR" << endl;
+        cout << "5. REGISTRAR UN PASAJERO EN UN NODO" << endl;
+        cout << "6. LISTAR TODOS LOS PASAJEROS" << endl;
+        cout << "7. SALIR" << endl;
+        cout << "INGRESE UNA OPCION:\n";
         cin >> opc;
 
         switch (opc)
@@ -445,47 +457,61 @@ int main()
             break;
         case 2:
         {
-            int idb;
-            cout << "Ingrese el identificador a buscar: ";
+            long long int idb;
+            cout << "INGRESE IDENTIFICADOR A BUSCAR: ";
             cin >> idb;
 
             nodo *nodoEncontrado = BuscarPorIdentificador(raiz, idb);
 
             if (nodoEncontrado != NULL)
             {
-                cout << "Nodo encontrado:" << endl;
+                cout << "NODO ENCONTRADO:" << endl;
                 imprimirNodo(nodoEncontrado);
+               
             }
             else
             {
-                cout << "No se encontró ningún nodo con ese identificador." << endl;
+                cout << "NO SE HA ENCONTRADO NINGUN NODO CON ESE IDENTIFICADOR." << endl;
             }
             break;
         }
         case 3:
-            cout << "nodos registrados (Inorden):\n";
+            cout << "NODOS REGISTRADOS (Inorden):\n";
             Inorden(raiz);
             cout << endl;
             break;
+            system("pause");
 
-        case 4:
+        case 4: {
+    long long int idEliminar;
+    cout << "INGRESE EL IDENTIFICADOR DEL NODO A ELIMINAR: ";
+    cin >> idEliminar;
 
-            break;
-
-        case 5:
-
+    raiz = eliminar(raiz, idEliminar); 
+    if (raiz != NULL) {
+        cout << "NODO ELIMINADO EXITOSAMENTE." << endl;
+    }
+    break;
+}
+		
+        case 5:{
+		
             registrarpasajero(raiz, identificador);
             break;
-        case 6:
+        }
+        case 6:{
+		
             // Implementar función para listar todos los pasajeros
-            cout << "Listando todos los pasajeros:" << endl;
+            cout << "LISTANDO TODOS LOS PASAJEROS: " << endl;
             listarTodosLosPasajeros(raiz);
             break;
+            system("pause");
+        }
         case 7:
-            cout << "Adiós" << endl;
+            cout << "BYE BYE" << endl;
             break;
         default:
-            cout << "Opción inválida" << endl;
+            cout << "OPCION INVALIDA" << endl;
             break;
         }
 
@@ -494,3 +520,4 @@ int main()
 
     return 0;
 }
+

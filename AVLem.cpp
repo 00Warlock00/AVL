@@ -46,7 +46,7 @@ void listarPasajeros(nodo *nodoEmbarcacion)
 {
     if (nodoEmbarcacion == NULL)
     {
-        // El árbol está vacío, no hay elementos para listar
+        // El Ã¡rbol estÃ¡ vacÃ­o, no hay elementos para listar
         cout << "EL ARBOL ESTA VACIO." << endl;
         return;
     }
@@ -159,7 +159,7 @@ struct nodo *insertar(struct nodo *nodo)
         return aux;
     }
 
-    if (compararIdentificadores(aux->identificacion[0], nodo->identificacion[0])) // Comparación por identificador
+    if (compararIdentificadores(aux->identificacion[0], nodo->identificacion[0])) // ComparaciÃ³n por identificador
     {
         nodo->izq = insertar(nodo->izq);
     }
@@ -201,14 +201,14 @@ void Inorden(nodo *raizz)
 {
     if (raizz != NULL)
     {
-        Inorden(raizz->izq); // Recorrer subárbol izquierdo
+        Inorden(raizz->izq); // Recorrer subÃ¡rbol izquierdo
 
-        // Imprimir información del nodo actual en orden ascendente
+        // Imprimir informaciÃ³n del nodo actual en orden ascendente
         cout << "NOMBRE: " << raizz->nombre << endl;
         cout << "IDENTIFICADOR: " << raizz->identificacion[0] << endl;
         cout << endl;
 
-        Inorden(raizz->der); // Recorrer subárbol derecho
+        Inorden(raizz->der); // Recorrer subÃ¡rbol derecho
     }
 }
 
@@ -267,9 +267,8 @@ struct nodo *eliminar(struct nodo *raiz, long long int idt) {
             // Copiar los datos del sucesor al nodo actual
             raiz->identificacion[0] = temp->identificacion[0];
             strcpy(raiz->nombre, temp->nombre);
-            // ... (copiar otros campos)
 
-            // Eliminar el sucesor (que ahora est� duplicado en el nodo actual)
+            // Eliminar el sucesor (que ahora está duplicado en el nodo actual)
             if (padreTemp == raiz) {
                 raiz->der = eliminar(raiz->der, temp->identificacion[0]);
             } else {
@@ -278,12 +277,12 @@ struct nodo *eliminar(struct nodo *raiz, long long int idt) {
         }
     }
 
-    // Si el �rbol estaba vac�o despu�s de eliminar el nodo, retornar NULL
+    // Si el árbol estaba vacío después de eliminar el nodo, retornar NULL
     if (raiz == NULL) {
         return raiz;
     }
 
-    // Actualizar la altura y rebalancear el �rbol (igual que antes)
+    // Actualizar la altura y rebalancear el árbol (igual que antes)
     raiz->altura = 1 + mayor(obtenerAltura(raiz->izq), obtenerAltura(raiz->der));
     int balance = obtenerBalance(raiz);
 
@@ -321,7 +320,7 @@ void crearNodo()
     
     aux = (struct nodo *)malloc(sizeof(struct nodo));
 
-    // Validar matrícula
+    // Validar matrÃ­cula
     do
     {
         cout << " INGRESE MATRICULA DE LA EMBARCACION";
@@ -329,7 +328,7 @@ void crearNodo()
 
         cin >> aux->matricula[0];
 
-    } while (aux->matricula[0] < 1000 || aux->matricula[0] > 9999); // Validar que la matrícula tenga 4 dígitos
+    } while (aux->matricula[0] < 1000 || aux->matricula[0] > 9999); // Validar que la matrÃ­cula tenga 4 dÃ­gitos
     cout << " INGRESE NOMBRE DE SU EMBARCACION\n";
     cin.ignore();
     cin.getline(aux->nombre, sizeof(aux->nombre)); 
@@ -415,16 +414,16 @@ void registrarpasajero(nodo *raiz, long long int identificado[])
         cab->sig = NULL;
         if (nodoEncontrado->inicioPasajeros == NULL) {
             nodoEncontrado->inicioPasajeros = cab;
-            nodoEncontrado->finPasajeros = cab; // Inicializar finPasajeros aqu�
+            nodoEncontrado->finPasajeros = cab; // Inicializar finPasajeros aquí
         } else {
             nodoEncontrado->finPasajeros->sig = cab;
-            nodoEncontrado->finPasajeros = cab; // Actualizar finPasajeros aqu�
+            nodoEncontrado->finPasajeros = cab; // Actualizar finPasajeros aquí
         }
 
         nodoEncontrado->numPasajeros++;
         cout << "PASAJERO REGISTRADO EXITOSAMENTE." << endl;
 
-        cout << "� DESEA AGREGAR OTRO PASAJERO ? (s/n):\n ";
+        cout << "¿ DESEA AGREGAR OTRO PASAJERO ? (s/n):\n ";
         cin >> opcion;
     } while (opcion == 's' || opcion == 'S' && nodoEncontrado->numPasajeros < nodoEncontrado->embarcacion); // Verificar capacidad
 }
@@ -503,7 +502,7 @@ raiz=NULL;
         }
         case 6:{
 		
-            // Implementar función para listar todos los pasajeros
+            // Implementar funciÃ³n para listar todos los pasajeros
             cout << "LISTANDO TODOS LOS PASAJEROS: " << endl;
             listarTodosLosPasajeros(raiz);
             break;

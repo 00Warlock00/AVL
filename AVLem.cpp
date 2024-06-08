@@ -7,6 +7,8 @@
 #include<conio.h>
 #include<string>
 
+//JHEISON CABAL Y SEBASTIAN GUAPI
+
 using namespace std;
 
 struct pasajero
